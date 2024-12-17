@@ -1,5 +1,5 @@
-import { testInput as input } from "./part-2-problem"
-import { getStonesAfterBlinksIterative, inputToNum } from "./part-1"
+import { input } from "./part-2-problem"
+import { inputToNum } from "./part-1"
 export function solve(): string {
     // Why don't we just try to use the same tactic here?
     // If we run into memory issues, maybe I can approach it with a divide and conquer strategy
@@ -24,14 +24,61 @@ export function solve(): string {
     // There are a lot of repeats for single digits
     // 0-9 reappear often
     // How do we take advantage of this fact?
-    // I give up again for a bit...
 
-    return `After 75 blinks, I'm not sure how many stones there will be!`
+    // Let's see if storing it in a map makes any sense
+
+    let stones: Record<string, number> = {}
+
+    const initialStones = inputToNum(input())
+
+    for (const stone of initialStones) {
+        addStone(stone, 1, stones)
+    }
+
+    let blinksRemaining = 75
+
+    while (blinksRemaining !== 0) {
+        const newStones: Record<string, number> = {}
+        blinksRemaining--
+        for (const [stone, reps] of Object.entries(stones)) {
+            const stoneNum = parseInt(stone)
+            const stoneDigits = stone.length
+            if (stoneNum === 0) {
+                addStone(1, reps, newStones)
+            } else if (stoneDigits % 2 === 0) {
+                const num1 = parseInt(stone.slice(0, stoneDigits / 2))
+                const num2 = parseInt(stone.slice(stoneDigits / 2))
+                addStone(num1, reps, newStones)
+                addStone(num2, reps, newStones)
+            } else {
+                addStone(stoneNum * 2024, reps, newStones)
+            }
+        }
+        stones = newStones
+    }
+
+    let totalStones = 0
+
+    for (const stoneNum of Object.values(stones)) {
+        totalStones += stoneNum
+    }
+
+    return `After 75 blinks, there will be a total of ${totalStones}.`
 }
 
-interface StoneBlinks {
-    value: number
-    repeats: number
+// Mutates stones object passed in
+export function addStone(
+    stoneNumber: number,
+    reps: number,
+    stones: Record<string, number>
+): void {
+    const stoneString = String(stoneNumber)
+
+    if (stones.hasOwnProperty(stoneString)) {
+        stones[stoneString] += reps
+    } else {
+        stones[stoneString] = reps
+    }
 }
 
 // ALL THIS BELOW DIDN'T WORK BUT I'M LEAVING IT HERE FOR ENTERTAINMENT PURPOSES
