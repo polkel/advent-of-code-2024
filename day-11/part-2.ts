@@ -15,10 +15,26 @@ export function solve(): string {
 
     // We'll come back to this later
 
-    const stones = inputToNum(input())
+    // Okay I'm back from being scared of this problem.
+    // Now let's try something different.
+
+    // The issue is that we run out of memory, so how do we conserve memory?
+    // Maybe we have some repeats?
+
+    // There are a lot of repeats for single digits
+    // 0-9 reappear often
+    // How do we take advantage of this fact?
+    // I give up again for a bit...
 
     return `After 75 blinks, I'm not sure how many stones there will be!`
 }
+
+interface StoneBlinks {
+    value: number
+    repeats: number
+}
+
+// ALL THIS BELOW DIDN'T WORK BUT I'M LEAVING IT HERE FOR ENTERTAINMENT PURPOSES
 
 // Okay, so the method of splitting arrays also didn't work
 // JS heap was out of memory

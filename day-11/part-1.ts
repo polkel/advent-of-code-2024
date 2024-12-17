@@ -68,7 +68,6 @@ export function getStonesAfterBlinksIterative(
         // Need to record this because we will mutate the stone array as
         // we iterate through it
         const currStonesLength = stonesClone.length
-        console.log(currStonesLength)
 
         for (let i = 0; i < currStonesLength; i++) {
             const currStone = stonesClone[i]
